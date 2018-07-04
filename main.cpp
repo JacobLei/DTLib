@@ -1,5 +1,6 @@
 #include <iostream>
 #include "SmartPointer.h"
+#include "Exception.h"
 
 using namespace std;
 using namespace DTLib;
@@ -43,11 +44,56 @@ void test_smart_pointer()
     //    因此sp.isNULL为1，nsp.isNULL为0。证明类同一片堆空间最多智能由一个指针标识，
 }
 
+/* -----测试异常类----- */
+void test_exception()
+{
+    try
+    {
+        THROW_EXCEPTION(InvalidParameterExcetion, "test");
+    }
+    catch(const InvalidParameterExcetion& e)
+    {
+        cout << "catch(const InvalidParameterExcetion& e)" << endl;
+        cout << e.message() << endl;
+        cout << e.location() << endl;
+    }
+    catch(const NoEnoughMemoryExcetion& e)
+    {
+        cout << "catch(const NoEnoughMemoryExcetion& e)" << endl;
+        cout << e.message() << endl;
+        cout << e.location() << endl;
+    }
+    catch(const IndexOutOfBoundsException& e)
+    {
+        cout << "catch(const IndexOutOfBoundsException& e)" << endl;
+        cout << e.message() << endl;
+        cout << e.location() << endl;
+    }
+    catch(const NullPointerException& e)
+    {
+        cout << "catch(const NullPointerException& e)" << endl;
+        cout << e.message() << endl;
+        cout << e.location() << endl;
+    }
+    catch(const ArithmeticException& e)
+    {
+        cout << "catch(const ArithmeticException& e)" << endl;
+        cout << e.message() << endl;
+        cout << e.location() << endl;
+    }
+
+    catch(const Exception e)
+    {
+        cout << "catch(const Exception& e)" << endl;
+        cout << e.message() << endl;
+        cout << e.location() << endl;
+    }
+}
 
 int main()
 {
-    test_smart_pointer();
+//    test_smart_pointer();
+    test_exception();
 
     return 0;
 }
-
