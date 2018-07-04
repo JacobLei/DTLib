@@ -4,6 +4,7 @@
 #include <cstring>
 #include <cstdlib>
 #include <cstdio>
+#include "Object.h"
 
 using namespace std;
 
@@ -12,7 +13,7 @@ namespace DTLib
 
 #define THROW_EXCEPTION(e, m) (throw e(m, __FILE__, __LINE__))
 
-class Exception
+class Exception : public Object
 {
 protected:
     char* m_message;    // 指向一个字符串，字符串用于说明当前异常的详细信息
@@ -238,6 +239,47 @@ public:
     }
 };
 
+class InvalidOperationExcetion : public Exception
+{
+public:
+    InvalidOperationExcetion()
+        : Exception(0)
+    {
+
+    }
+
+    InvalidOperationExcetion(const char* message)
+        : Exception(message)
+    {
+
+    }
+
+    InvalidOperationExcetion(const char *file, int line)
+        : Exception(file, line)
+    {
+
+    }
+
+    InvalidOperationExcetion(const char* message, const char* file, int line)
+        : Exception(message, file, line)
+    {
+
+    }
+
+    InvalidOperationExcetion(const InvalidOperationExcetion& e)
+        : Exception(e)
+    {
+
+    }
+
+    InvalidOperationExcetion& operator =(const InvalidOperationExcetion& e)
+    {
+        Exception::operator =(e);
+
+        return *this;
+    }
+};
+
 
 void Exception::init(const char *message, const char *file, int line)
 {
@@ -260,9 +302,14 @@ void Exception::init(const char *message, const char *file, int line)
             大小为strlen(file)+strlen(sl)+2
          */
         m_location = static_cast<char*>(malloc(strlen(file) + strlen(sl) +2));
-        m_location = strcpy(m_location, file);
-        m_location = strcat(m_location, ":");
-        m_location = strcat(m_location, sl);
+
+        /* 判断malloc是否申请成功 */
+        if( m_location != NULL )
+        {
+            m_location = strcpy(m_location, file);
+            m_location = strcat(m_location, ":");
+            m_location = strcat(m_location, sl);
+        }
     }
     else
     {
