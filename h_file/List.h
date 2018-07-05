@@ -15,7 +15,7 @@ public:
     virtual bool set(int i, const T& e) = 0;
     virtual bool get(int i, T& e) = 0;
     virtual int length() = 0;
-    virtual bool clear() = 0;
+    virtual void clear() = 0;
 };
 
 }
