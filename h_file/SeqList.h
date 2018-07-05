@@ -14,6 +14,7 @@ protected:
     T* m_array;     // 顺序存储空间：由子类分配空间
     int m_length;   // 当前线性表长度
 public:
+    bool insert(const T& e);
     bool insert(int i, const T& e);
     bool remove(int i);
     bool set(int i, const T& e);
@@ -25,6 +26,12 @@ public:
     T operator [] (int i) const;
     virtual int capacity() const = 0;
 };
+
+template< typename T >
+bool SeqList<T>::insert(const T& e)
+{
+    return insert(m_length, e);
+}
 
 template< typename T >
 bool SeqList<T>::insert(int i, const T& e)
