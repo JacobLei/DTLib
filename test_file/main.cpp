@@ -1,6 +1,8 @@
 #include <iostream>
 #include "SmartPointer.h"
 #include "Exception.h"
+#include "SeqList.h"
+
 
 using namespace std;
 using namespace DTLib;
@@ -82,7 +84,7 @@ void test_exception()
         cout << e.location() << endl;
     }
 
-    catch(const Exception e)
+    catch(const Exception& e)
     {
         cout << "catch(const Exception& e)" << endl;
         cout << e.message() << endl;
@@ -90,10 +92,84 @@ void test_exception()
     }
 }
 
+/* -----测试抽象SeqList类----- */
+void test_seq_list()
+{
+//    SeqList<int>* q;       // 由于抽象类中含有virtual函数，可定义一个指针指向SeqList<int>
+                           // 来测试SeqList.h是否编译通过
+}
+
+#include "StaticList.h"
+#include "Exception.h"
+
+/* -----测试StaticList类----- */
+void test_static_list()
+{
+    StaticList<int, 5> sl;
+
+    for( int i=0; i<sl.capcity(); ++i)
+    {
+        sl.insert(0, i);
+    }
+
+    for( int i=0; i<sl.capcity(); ++i)  // 4， 3， 2， 1， 0
+    {
+        cout << sl[i] << endl;
+    }
+
+    sl[0] *= sl[0];
+
+    for( int i=0; i<sl.capcity(); ++i)  // 16， 3， 2， 1， 0
+    {
+        cout << sl[i] << endl;
+    }
+
+    try
+    {
+        sl[5];
+    }
+    catch(Exception& e)
+    {
+        cout << e.location() << "----" << e.message() << endl;  // SeqList.h:108----Parameter i is invalid...
+    }
+}
+
+#include "DynamicList.h"
+/* -----测试DynamicList类----- */
+void test_dynamic_list()
+{
+    DynamicList<int> sl(5);
+
+    for( int i=0; i<sl.capcity(); ++i)
+    {
+        sl.insert(0, i);
+    }
+
+    for( int i=0; i<sl.capcity(); ++i)  // 4， 3， 2， 1， 0
+    {
+        cout << sl[i] << endl;
+    }
+
+    sl[0] *= sl[0];
+
+    for( int i=0; i<sl.capcity(); ++i)  // 16， 3， 2， 1， 0
+    {
+        cout << sl[i] << endl;
+    }
+
+    sl.resize(10);
+
+    cout << sl.capcity() << endl;
+
+}
+
+
 int main()
 {
 //    test_smart_pointer();
-    test_exception();
-
+//    test_exception();
+//    test_seq_list();
+//    test_static_list();
+    test_dynamic_list();
     return 0;
 }
