@@ -18,7 +18,7 @@ public:
         this->m_length = 0;
     }
 
-    int capcity() const
+    int capacity() const
     {
         return N;
     }

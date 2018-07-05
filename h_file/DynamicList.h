@@ -28,7 +28,7 @@ public:
         }
     }
 
-    int capcity() const
+    int capacity() const
     {
         return m_capacity;
     }

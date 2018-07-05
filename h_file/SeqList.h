@@ -23,14 +23,14 @@ public:
     /* 顺序存储线性表的数组访问方式 */
     T& operator[] (int i);
     T operator [] (int i) const;
-    virtual int capcity() const = 0;
+    virtual int capacity() const = 0;
 };
 
 template< typename T >
 bool SeqList<T>::insert(int i, const T& e)
 {
     bool ret = (i >= 0) && (i <= m_length);
-    ret = ret && ((m_length) < capcity());
+    ret = ret && ((m_length) < capacity());
 
     if( ret )
     {
@@ -105,7 +105,7 @@ T& SeqList<T>::operator[] (int i)
     }
     else
     {
-        THROW_EXCEPTION(IndexOutOfBoundsException, "Parameter i is invalild...");
+        THROW_EXCEPTION(IndexOutOfBoundsException, "Parameter i is invalid...");
     }
 }
 
