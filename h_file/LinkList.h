@@ -22,7 +22,8 @@ protected:
         Node* next;
     } m_header;      // mutable突破const的限制
     int m_length;
-
+    Node* m_current;    // 定义游标 m_current
+    int m_step;
     Node* position(int i) const  // 定位元素， 返回i的前一个结点的指针
     {
         Node* ret = reinterpret_cast<Node*>(&m_header);
@@ -37,15 +38,21 @@ protected:
 
 public:
     LinkList();
-    bool insert(const T& e);
-    bool insert(int i, const T& e);
-    bool remove(int i);
-    bool set(int i, const T& e);
-    T get(int i) const;
-    bool get(int i, T& e) const;
-    int find(const T &e) const;
-    int length() const;
-    void clear();
+    bool insert(const T& e);               // O(n)
+    bool insert(int i, const T& e);        // O(n)
+    bool remove(int i);                    // O(n)
+    bool set(int i, const T& e);           // O(n)
+    T get(int i) const;                    // O(n)
+    bool get(int i, T& e) const;           // O(n)
+    int find(const T &e) const;            // O(n)
+    int length() const;                    // O(1)
+    void clear();                          // O(n)
+
+    /* 游标遍历相关函数 */
+    bool move(int i, int step);
+    bool end();
+    bool next();
+    T current();
     ~LinkList();
 };
 
@@ -54,6 +61,8 @@ LinkList<T>::LinkList()        // 构造函数, 设置成员初始状态
 {
     m_header.next = NULL;
     m_length = 0;
+    m_step = 1;
+    m_current = NULL;
 }
 
 template <typename T >
@@ -193,6 +202,53 @@ void LinkList<T>::clear()
     }
 
     m_length = 0;
+}
+
+template < typename T >
+bool LinkList<T>::move(int i, int step = 1)
+{
+    bool ret = (i >= 0) && (i < m_length) && (step > 0);
+
+    if( ret )
+    {
+        m_current =position(i)->next;
+        m_step = step;
+    }
+
+    return ret;
+}
+
+template < typename T >
+bool LinkList<T>::end()
+{
+    return m_current == NULL;
+}
+
+template < typename T >
+bool LinkList<T>::next()
+{
+    int i = 0;
+
+    while( ( i<m_step ) && ( !end() ) )
+    {
+        m_current = m_current->next;
+        ++i;
+    }
+
+    return (i == m_step);
+}
+
+template < typename T >
+T LinkList<T>::current()
+{
+    if( !end() )
+    {
+        return m_current->value;
+    }
+    else
+    {
+        THROW_EXCEPTION(InvalidOperationExcetion, "No value at current position...");
+    }
 }
 
 template < typename T >
