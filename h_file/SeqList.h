@@ -19,6 +19,7 @@ public:
     bool remove(int i);
     bool set(int i, const T& e);
     bool get(int i, T& e) const;
+    int find(const T &e) const;
     int length() const;
     void clear();
     /* 顺序存储线性表的数组访问方式 */
@@ -92,6 +93,23 @@ bool SeqList<T>::get(int i, T& e) const
     if( ret )
     {
         e = m_array[i];
+    }
+
+    return ret;
+}
+
+template < typename T >
+int SeqList<T>::find(const T &e) const
+{
+    int ret = -1;
+
+    for(int pos=0; pos<m_length; ++pos)
+    {
+        if( m_array[pos] == e)
+        {
+            ret = pos;
+            break;
+        }
     }
 
     return ret;

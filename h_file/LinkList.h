@@ -43,6 +43,7 @@ public:
     bool set(int i, const T& e);
     T get(int i) const;
     bool get(int i, T& e) const;
+    int find(const T &e) const;
     int length() const;
     void clear();
     ~LinkList();
@@ -146,6 +147,30 @@ bool LinkList<T>::get(int i, T& e) const
     if( ret )
     {
         e = position(i)->next->value;
+    }
+
+    return ret;
+}
+
+template < typename T >
+int LinkList<T>::find(const T &e) const
+{
+    int ret = -1;
+    int pos = 0;
+    Node* node = m_header.next;
+
+    while( node )
+    {
+        if( node->value == e )
+        {
+            ret = pos;
+            break;
+        }
+        else
+        {
+            node = node->next;
+            ++pos;
+        }
     }
 
     return ret;
