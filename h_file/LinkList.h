@@ -36,6 +36,16 @@ protected:
         return ret;
     }
 
+    virtual Node* create()      // 内部进行create封装
+    {
+        return new Node();
+    }
+
+    virtual void destory(Node* pn)     // 内部进行destory封装
+    {
+        delete pn;
+    }
+
 public:
     LinkList();
     bool insert(const T& e);               // O(n)
@@ -72,7 +82,7 @@ bool LinkList<T>::insert(int i, const T& e)
 
     if( ret )
     {
-        Node* node = new Node();
+        Node* node = create();
 
         if( node != NULL )
         {
@@ -110,7 +120,7 @@ bool LinkList<T>::remove(int i)
 
         Node* toDel = current->next;
         current->next = toDel->next;
-        delete toDel;
+        destory(toDel);
 
         --m_length;
     }
@@ -198,7 +208,7 @@ void LinkList<T>::clear()
     {
         Node* toDel = m_header.next;
         m_header.next = toDel->next;
-        delete toDel;
+        destory(toDel);
     }
 
     m_length = 0;
