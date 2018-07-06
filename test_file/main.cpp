@@ -107,19 +107,20 @@ void test_static_list()
 {
     StaticList<int, 5> sl;
 
-    for( int i=0; i<sl.capcity(); ++i)
+    for( int i=0; i<sl.capacity(); ++i)
     {
-        sl.insert(0, i);
+        sl.insert(i+1);
+//        sl[i] = i + 1;    // error: IndexOutOfBoundsException
     }
 
-    for( int i=0; i<sl.capcity(); ++i)  // 4， 3， 2， 1， 0
+    for( int i=0; i<sl.capacity(); ++i)  // 4， 3， 2， 1， 0
     {
         cout << sl[i] << endl;
     }
 
     sl[0] *= sl[0];
 
-    for( int i=0; i<sl.capcity(); ++i)  // 16， 3， 2， 1， 0
+    for( int i=0; i<sl.capacity(); ++i)  // 16， 3， 2， 1， 0
     {
         cout << sl[i] << endl;
     }
@@ -140,29 +141,152 @@ void test_dynamic_list()
 {
     DynamicList<int> sl(5);
 
-    for( int i=0; i<sl.capcity(); ++i)
+    for( int i=0; i<sl.capacity(); ++i)
     {
         sl.insert(0, i);
     }
 
-    for( int i=0; i<sl.capcity(); ++i)  // 4， 3， 2， 1， 0
+    for( int i=0; i<sl.capacity(); ++i)  // 4， 3， 2， 1， 0
     {
         cout << sl[i] << endl;
     }
 
     sl[0] *= sl[0];
 
-    for( int i=0; i<sl.capcity(); ++i)  // 16， 3， 2， 1， 0
+    for( int i=0; i<sl.capacity(); ++i)  // 16， 3， 2， 1， 0
     {
         cout << sl[i] << endl;
     }
 
     sl.resize(10);
 
-    cout << sl.capcity() << endl;
+    cout << sl.capacity() << endl;       // 10
 
 }
 
+# include "StaticList.h"
+/* -----测试StaticList类中赋值操作----- */
+void test_copy_assignment_in_static_list()
+{
+    StaticList<int*, 5> s1;
+    StaticList<int*, 5> s2;
+
+    for(int i=0; i<s1.capacity(); ++i)
+    {
+        s1.insert(0, new int(i));
+    }
+
+//    s2 = s1;
+
+    for(int i=0; i<s1.length(); ++i)
+    {
+        delete s1[i];
+        delete s2[i];   // error:释放类同一块内存空间，因此最好禁用赋值操作
+    }
+}
+
+#include "DynamicList.h"
+/* -----测试DynamicList中拷贝构造----- */
+void test_copy_ctor_in_dynamic_list()
+{
+    DynamicList<int> d1(5);
+//    DynamicList<int> d2 = d1;   // error:d1和d2为潜拷贝，两个对象操作同一块内存地址
+                                //       当调用析构函数时，会释放同一块内存空间。
+                                //       因此，最好禁用拷贝构造。
+}
+
+#include "StaticArray.h"
+/* -----测试StaticArray函数----- */
+void test_static_array()
+{
+    StaticArray<int, 5> s1;
+
+    for(int i=0; i<s1.length(); ++i)
+    {
+        s1[i] = i * i;
+    }
+
+    for(int i=0; i<s1.length(); ++i)
+    {
+        cout << s1[i] << " ";           // 0 1 4 9 16
+    }
+
+    cout << endl;
+
+    StaticArray<int, 5> s2;
+
+    s2 = s1;
+
+    for(int i=0; i<s2.length(); ++i)
+    {
+        cout << s2[i] << " ";           // 0 1 4 9 16
+    }
+    cout << endl;
+
+    s2[6] = 100;            // error: IndexOutOfBoundsException
+                            // 越界后报异常
+}
+
+#include "DynamicArray.h"
+/* -----测试DynamicArray函数----- */
+void test_dynamic_array()
+{
+    DynamicArray<int> s1(5);
+    DynamicArray<int> s2(10);
+
+    for(int i=0; i<s1.length(); ++i)
+    {
+        s1[i] = i * i;
+    }
+
+    for(int i=0; i<s1.length(); ++i)
+    {
+        cout << s1[i] << " ";           // 0 1 4 9 16
+    }
+    cout << endl;
+
+    s2 = s1;
+    s2.resize(8);
+
+    for(int i=0; i<s2.length(); ++i)
+    {
+        cout << s2[i] << " ";           // 0 1 4 9 16 随机数 随机数 随机数
+    }
+
+    cout << endl;
+
+//   s2[11] = 100;                       // error: IndexOutOfBoundsException
+}
+
+#include "LinkList.h"
+/* -----测试LinkList函数----- */
+void test_link_list()
+{
+    LinkList<int> l;
+
+    for(int i=0; i<5; ++i)
+    {
+        l.insert(i * i);
+    }
+
+    for(int i=0; i<l.length(); ++i)
+    {
+        cout << l.get(i) << ", ";       // 0, 1, 4, 9, 16,
+    }
+    cout << endl;
+
+    l.remove(2);
+
+    for(int i=0; i<l.length(); ++i)
+    {
+        cout << l.get(i) << ", ";       // 0, 1, 9, 16,
+    }
+    cout << endl;
+
+    l.clear();
+
+    cout << l.length() << endl;         // 0
+}
 
 int main()
 {
@@ -170,6 +294,11 @@ int main()
 //    test_exception();
 //    test_seq_list();
 //    test_static_list();
-    test_dynamic_list();
+//    test_dynamic_list();
+//    test_copy_assignment_in_static_list();
+//    test_copy_assignment_in_static_list();
+//    test_static_array();
+//    test_dynamic_array();
+    test_link_list();
     return 0;
 }
