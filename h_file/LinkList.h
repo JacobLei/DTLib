@@ -24,27 +24,9 @@ protected:
     int m_length;
     Node* m_current;    // 定义游标 m_current
     int m_step;
-    Node* position(int i) const  // 定位元素， 返回i的前一个结点的指针
-    {
-        Node* ret = reinterpret_cast<Node*>(&m_header);
-
-        for(int pos=0; pos<i; ++pos)
-        {
-            ret = ret->next;
-        }
-
-        return ret;
-    }
-
-    virtual Node* create()      // 内部进行create封装
-    {
-        return new Node();
-    }
-
-    virtual void destory(Node* pn)     // 内部进行destory封装
-    {
-        delete pn;
-    }
+    Node* position(int i) const;  // 定位元素， 返回i的前一个结点的指针
+    virtual Node* create();      // 内部进行create封装
+    virtual void destroy(Node* pn);     // 内部进行destroy封装
 
 public:
     LinkList();
@@ -74,6 +56,33 @@ LinkList<T>::LinkList()        // 构造函数, 设置成员初始状态
     m_step = 1;
     m_current = NULL;
 }
+
+template < typename T>
+typename LinkList<T>::Node* LinkList<T>::position(int i) const
+{
+    Node* ret = reinterpret_cast<Node*>(&m_header);
+
+    for(int pos=0; pos<i; ++pos)
+    {
+        ret = ret->next;
+    }
+
+    return ret;
+}
+
+template < typename T >
+typename LinkList<T>::Node* LinkList<T>::create()
+{
+    return new Node();
+}
+
+template < typename T >
+void LinkList<T>::destroy(Node* pn)
+{
+    delete pn;
+}
+
+
 
 template <typename T >
 bool LinkList<T>::insert(int i, const T& e)
@@ -117,12 +126,16 @@ bool LinkList<T>::remove(int i)
     if( ret )
     {
         Node* current = position(i);
-
         Node* toDel = current->next;
-        current->next = toDel->next;
-        destory(toDel);
 
-        --m_length;
+        if(  m_current == toDel )       // 如果游标指针指向要删除的指针
+        {
+            m_current = toDel->next;    // 移动游标指针
+        }
+
+        current->next = toDel->next;
+        --m_length;                     // 先将length-1
+        destroy(toDel);                 // 然后再destroy对象，因为如果destroy如果出现异常，此时的length信息还是正确的
     }
 
     return ret;
@@ -208,10 +221,9 @@ void LinkList<T>::clear()
     {
         Node* toDel = m_header.next;
         m_header.next = toDel->next;
-        destory(toDel);
+        --m_length;
+        destroy(toDel);
     }
-
-    m_length = 0;
 }
 
 template < typename T >
