@@ -289,7 +289,7 @@ void Exception::init(const char *message, const char *file, int line)
      *                      // 无法知道message的生命周期。
      *                      // 解决方案：使用strdup函数，在堆空间中申请内存，拷贝字符串。
      */
-    m_message = strdup(message);
+    m_message = (message ? strdup(message) : NULL); // 添加判断message是否为空
 
     if ( file != NULL )
     {
