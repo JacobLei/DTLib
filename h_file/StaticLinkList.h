@@ -53,6 +53,7 @@ protected:
             {
                 m_used[i] = 0;
                 psn->~SNode();       // 调用析构函数
+                break;
             }
         }
     }
