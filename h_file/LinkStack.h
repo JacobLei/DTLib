@@ -13,11 +13,11 @@ class LinkStack : public Stack<T>
 protected:
     LinkList<T> m_list;
 public:
-    void push (const T& e);
-    void pop();
-    T top() const;
-    void clear();
-    int size() const;
+    void push (const T& e);     // O(1)
+    void pop();                 // O(1)
+    T top() const;              // O(1)
+    void clear();               // O(n)
+    int size() const;           // O(1)
 };
 
 template < typename T >

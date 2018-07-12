@@ -15,13 +15,13 @@ protected:
     int m_top;
     int m_size;
 public:
-    StaticStack();
-    void push (const T& e);
-    void pop();
-    T top() const;
-    void clear();
-    int size() const;
-    int capacity() const;
+    StaticStack();              // O(1)
+    void push (const T& e);     // O(1)
+    void pop();                 // O(1)
+    T top() const;              // O(1)
+    void clear();               // O(1)
+    int size() const;           // O(1)
+    int capacity() const;       // O(1)
 };
 
 template < typename T, int N >
