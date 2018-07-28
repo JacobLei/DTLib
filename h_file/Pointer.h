@@ -15,9 +15,11 @@ public:
     Pointer(T* p = NULL);
 
     T* operator-> ();
-    T* operator* ();
-    bool isNull();
-    T* get();
+    T& operator* ();
+    const T* operator ->() const;
+    const T& operator *() const;
+    bool isNull() const;
+    T* get() const;
 };
 
 template < typename T >
@@ -33,19 +35,31 @@ T* Pointer<T>::operator-> ()
 }
 
 template < typename T >
-T* Pointer<T>::operator* ()
+T& Pointer<T>::operator* ()
 {
     return *m_pointer;
 }
 
 template < typename T >
-bool Pointer<T>::isNull()
+const T* Pointer<T>::operator-> () const
+{
+    return m_pointer;
+}
+
+template < typename T >
+const T& Pointer<T>::operator* () const
+{
+    return *m_pointer;
+}
+
+template < typename T >
+bool Pointer<T>::isNull() const
 {
     return (m_pointer == NULL);
 }
 
 template < typename T >
-T* Pointer<T>::get()
+T* Pointer<T>::get() const
 {
     return m_pointer;
 }
